@@ -54,29 +54,25 @@ public class SPIELAUTOMAT
         spiel.zeichne();
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter(" ");
-        String line;
+        String command;
         while(true) {
-            line = sc.nextLine();
-            if(line.equals("rerun")) {
+            command = sc.nextLine();
+            String[] commandOptions = command.split(" ");
+            if(commandOptions.length == 0) commandOptions[0] = "";
+            if(command.startsWith("rerun")) {
                 spiel.spiele();
-            } else if(line.equals("stop")) {
+            } else if(commandOptions[0].equals("stop")) {
                 sc.close();
                 System.exit(1);
-            } else if(line.startsWith("score")) {
-                String cmd;
-                if(sc.hasNext()) cmd = sc.next();
-                else cmd = "";
-                if(cmd.equals("add")) {
-                    if(sc.hasNextInt()) {
-                        String number = sc.next();
-                    } else {
-                        System.out.println("Syntaxfehler:");
-                    }
-                } else if(cmd.equals("remove")) {
+            } else if(commandOptions[0].startsWith("score")) {
+                if(commandOptions.length == 1) commandOptions[1] = "";
+                if(commandOptions[1].equals("add")) {
 
-                } else if(cmd.equals("set")) {
+                } else if(commandOptions[1].equals("remove")) {
 
-                } else if(cmd.equals("reset")) {
+                } else if(commandOptions[1].equals("set")) {
+
+                } else if(commandOptions[1].equals("reset")) {
 
                 } else {
                     System.out.println("System Command score:");
