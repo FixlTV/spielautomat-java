@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 import java.awt.*;
 import java.io.*;
 
@@ -34,7 +35,7 @@ public class Spielautomat
         spielwalze3 = new SPIELWALZE(breite / 2 + laenge / 2, 10, laenge, z1);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         File file = new File("data/score.txt");
         if(!file.exists()) {
             Writer w = new FileWriter("data/score.txt");
@@ -49,7 +50,7 @@ public class Spielautomat
         int width = (int)size.getWidth();
         int heigth = (int)size.getHeight();
         new ZEICHENFENSTER("test", width, heigth, true, true);
-        Sielautomat spiel = new Spielautomat(width, heigth);
+        Spielautomat spiel = new Spielautomat(width, heigth);
         spiel.zeichne();
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter(" ");
@@ -94,7 +95,7 @@ public class Spielautomat
         spielwalze3.zeichne();
     } 
     
-    public void aktualisiere(int z1Neu, int z2Neu, int z3Neu)
+    public void aktualisiere(int z1Neu, int z2Neu, int z3Neu) throws InterruptedException
     {
         Random random = new Random();
         spielwalze1.faerbeUm(z1);
@@ -117,7 +118,7 @@ public class Spielautomat
         }
     }
     
-    public void spiele() throws IOException
+    public void spiele() throws IOException, InterruptedException
     {
         aktualisiere(zufall.nextInt(9), zufall.nextInt(9), zufall.nextInt(9));
         guthaben += guthaben();
@@ -133,7 +134,7 @@ public class Spielautomat
         } else return -1;
     }
     
-    public void speichern(String file, String value) 
+    public void speichern(String file, String value) throws IOException 
     {
         Writer w = new FileWriter(file);
         w.write(value);
