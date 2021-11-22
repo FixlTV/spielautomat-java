@@ -46,10 +46,10 @@ public class ZEICHENFENSTER
         singleton = new ZEICHENFENSTER(titel, breite, hoehe, Color.white);
     }
 
-    public ZEICHENFENSTER(String titel, int breite, int hoehe, boolean showIcon, boolean maximaize) {
+    public ZEICHENFENSTER(String titel, int breite, int hoehe, boolean showIcon, boolean maximize) {
         singleton = new ZEICHENFENSTER(titel, breite, hoehe, Color.white);
         if(showIcon) singleton.toggleIcon();
-        if(maximaize) singleton.maximize();
+        if(maximize) singleton.maximize();
     }
 
     /**

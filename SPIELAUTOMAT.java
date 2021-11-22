@@ -1,16 +1,15 @@
 import java.util.Random;
-import java.util.Scanner;
 import java.awt.*;
 import java.io.*;
 
-public class SPIELAUTOMAT
+public class Spielautomat 
 {
     private SPIELWALZE spielwalze1, spielwalze2, spielwalze3;
     private int z1, z2, z3;
     private Random zufall;
     private static int guthaben = 100;
     
-    public SPIELAUTOMAT()
+    public Spielautomat()
     {
         zufall = new Random();
      
@@ -22,17 +21,17 @@ public class SPIELAUTOMAT
         spielwalze3 = new SPIELWALZE(110, 10, 50, z1);
     }
 
-    public SPIELAUTOMAT(int breite, int höhe) {
-        int länge = breite / 7;
+    public Spielautomat(int breite, int hoehe) {
+        int laenge = breite / 7;
 
         zufall = new Random();
 
         z1 = 7;
         z2 = 7;
         z3 = 7;
-        spielwalze1 = new SPIELWALZE(breite / 2 - länge / 2 * 3, 10, länge, z3);
-        spielwalze2 = new SPIELWALZE(breite / 2 - länge / 2, 10, länge, z2);
-        spielwalze3 = new SPIELWALZE(breite / 2 + länge / 2, 10, länge, z1);
+        spielwalze1 = new SPIELWALZE(breite / 2 - laenge / 2 * 3, 10, laenge, z3);
+        spielwalze2 = new SPIELWALZE(breite / 2 - laenge / 2, 10, laenge, z2);
+        spielwalze3 = new SPIELWALZE(breite / 2 + laenge / 2, 10, laenge, z1);
     }
 
     public static void main(String[] args) throws IOException {
@@ -49,8 +48,8 @@ public class SPIELAUTOMAT
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.getWidth();
         int heigth = (int)size.getHeight();
-        new ZEICHENFENSTER("ClydeStore®️ MoneyWaste™️", width, heigth, true, true);
-        SPIELAUTOMAT spiel = new SPIELAUTOMAT(width, heigth);
+        new ZEICHENFENSTER("test", width, heigth, true, true);
+        Sielautomat spiel = new Spielautomat(width, heigth);
         spiel.zeichne();
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter(" ");
@@ -81,6 +80,9 @@ public class SPIELAUTOMAT
                     System.out.println("score set <Integer>        | Setzt die Score Punkte auf einen absoluten Wert");
                     System.out.println("score reset                | Setzt die Score Punkte auf den Standardwert zurück");
                 }
+            } else {
+                System.out.println("Unknown Command.");
+                System.out.println("Try 'help' for a list of all available commands.");
             }
         }
     }
@@ -94,36 +96,33 @@ public class SPIELAUTOMAT
     
     public void aktualisiere(int z1Neu, int z2Neu, int z3Neu)
     {
-        z1 = z1Neu;
-        z2 = z2Neu;
-        z3 = z3Neu;
+        Random random = new Random();
         spielwalze1.faerbeUm(z1);
         spielwalze2.faerbeUm(z2);
         spielwalze3.faerbeUm(z3);
-        this.zeichne();
+        while(z1 != z1Neu || z2 != z2Neu || z3 != z3Neu) {
+            if(z1 != z1Neu) {
+                z1 = random.nextInt(9);
+                spielwalze1.faerbeUm(z1);
+            }
+            if(z2 != z2Neu) {
+                z2 = random.nextInt(9);
+                spielwalze2.faerbeUm(z2);
+            }
+            if(z3 != z2Neu) {
+                z3 = random.nextInt(9);
+                spielwalze3.faerbeUm(z3);
+            }
+            Thread.sleep(200);
+        }
     }
     
     public void spiele() throws IOException
     {
         aktualisiere(zufall.nextInt(9), zufall.nextInt(9), zufall.nextInt(9));
         guthaben += guthaben();
-        Writer w = new FileWriter("data/score.txt");
-        w.write(String.valueOf(guthaben));
-        w.close();
+        speichern("data/score.txt", String.valueOf(guthaben));
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // public void schreibeWerte()
-    // {
-        
-    // }
     
     public int guthaben()
     {
@@ -134,36 +133,10 @@ public class SPIELAUTOMAT
         } else return -1;
     }
     
-    // public int w (int g)
-    // {
-       
-        
-    // }   
-            
-    // public int f(int g)
-    
-    // {
-        
-         
-    // }   
-    
-    
-    
-    // public void w1 (int g)
-    // {
-        
-       
-    // }   
-    
-    // public int f1(int g)
-    
-    // {
-        
-            
-        
-         
-    // }   
-            
-    
-
+    public void speichern(String file, String value) 
+    {
+        Writer w = new FileWriter(file);
+        w.write(value);
+        w.close();
+    }
 }
