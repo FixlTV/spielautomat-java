@@ -8,6 +8,11 @@ public class KeyEventManager implements KeyListener {
 
     KeyEventManager(Spielautomat start) {
         spiel = start;
+        try {
+            spiel.spiele();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
