@@ -55,6 +55,7 @@ public class ZEICHENFENSTER
         frame.getContentPane().add(p1,BorderLayout.EAST);
         frame.getContentPane().add(steuerungSued,BorderLayout.SOUTH);
         frame.setTitle(titel);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         backgroundColor = hintergrundFarbe;
         frame.pack();
         zeige();
