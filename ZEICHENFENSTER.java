@@ -16,39 +16,19 @@ import java.net.URL;
 
 public class ZEICHENFENSTER
 {
-    private JFrame frame;
+    public JFrame frame;
     private CanvasPane canvas;
     private JPanel steuerungOst,steuerungSued;
     private Graphics2D graphic;
     private Color backgroundColor;
     private Image canvasImage;
 
-    private int showIcon = 0;
-    private static ZEICHENFENSTER singleton;
+    public static ZEICHENFENSTER singleton;
 
-    /**
-     * Erzeugt eine Zeichenfenster mit Standardma�en 600*500 und Hintergrundfarbe wei� 
-     * @param titel  Titel des Fensters     
-     */
-    public ZEICHENFENSTER(String titel)
-    {
-        singleton = new ZEICHENFENSTER(titel, 600, 500, Color.white);      
-    }
-
-    /**
-     * Erzeugt ein Zeichenfenster mit wei�em Hintergrund.
-     * @param titel  Fensterueberschirft
-     * @param breite  Breite des Fensters
-     * @param hoehe  Hoehe des Fensters
-     */
-    public ZEICHENFENSTER(String titel, int breite, int hoehe)
-    {
-        singleton = new ZEICHENFENSTER(titel, breite, hoehe, Color.white);
-    }
 
     public ZEICHENFENSTER(String titel, int breite, int hoehe, boolean showIcon, boolean maximize) {
         singleton = new ZEICHENFENSTER(titel, breite, hoehe, Color.white);
-        if(showIcon) singleton.toggleIcon();
+        if(showIcon) singleton.showIcon();
         if(maximize) singleton.maximize();
     }
 
@@ -82,21 +62,18 @@ public class ZEICHENFENSTER
 
     public static ZEICHENFENSTER gibFenster()
     {
-        if (singleton==null){new ZEICHENFENSTER("Das Zeichenfenster");}
+        if(singleton == null) {
+            throw new UnknownError("Ein unbekannter Fehler ist aufgetreten.\nDer Prozess wird beendet.");
+        }
         singleton.zeige();
         return singleton;
     }
 
-    public void toggleIcon() {
+    public void showIcon() {
         if(singleton == null) return;
-        if(showIcon == 0) {
-            URL iconURL = getClass().getResource("/data/icon.png");
-            ImageIcon icon = new ImageIcon(iconURL);
-            frame.setIconImage(icon.getImage());
-        } else {
-
-        }
-        showIcon = 1 - showIcon;
+        URL iconURL = getClass().getResource("/data/icon.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        frame.setIconImage(icon.getImage());
     }
 
     public void maximize() {

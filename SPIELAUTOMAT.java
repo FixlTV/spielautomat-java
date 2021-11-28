@@ -3,16 +3,18 @@ import java.util.Scanner;
 import java.awt.*;
 import java.io.*;
 
-public class Spielautomat 
-{
+public class Spielautomat {
     private SPIELWALZE spielwalze1, spielwalze2, spielwalze3;
     private int z1, z2, z3;
     private Random zufall;
+    private boolean playing = false;
     private static int guthaben = 100;
     private static int startcode = -1;
     private static int highscore = 100;
     private static int pointswon = 0;
     private static int games_played = 0;
+    private static int breite;
+    private static int laenge;
     
     public Spielautomat() throws IOException
     {
@@ -27,30 +29,30 @@ public class Spielautomat
         // spielwalze3 = new SPIELWALZE(110, 10, 50, z1);
     }
 
-    public Spielautomat(int breite, int hoehe) throws IOException {
+    public Spielautomat(int width, int hoehe) throws IOException {
         if(startcode == -1) {
             System.out.println("BlueJ Startschutz ausgelöst.");
             System.out.println("Zur Verwendung des Automaten bitte die Main Methode aufrufen.");
-            System.out.println("");
+            System.out.println("Der Prozess wird nun automatisch neugestartet.");
             main(null);
             return;
         }
-        int laenge = breite / 7;
+        laenge = width / 7;
+        breite = width;
 
         zufall = new Random();
 
         z1 = 7;
         z2 = 7;
         z3 = 7;
-        spielwalze1 = new SPIELWALZE(breite / 2 - laenge / 2 * 3, 10, laenge, z3);
-        spielwalze2 = new SPIELWALZE(breite / 2 - laenge / 2, 10, laenge, z2);
-        spielwalze3 = new SPIELWALZE(breite / 2 + laenge / 2, 10, laenge, z1);
     }
 
     public static void main(String[] args) throws IOException  {
-        File file = new File("data/scores.txt");
+
+        //Daten laden/erstellen
+        File file = new File("data/scores.data");
         if(!file.exists()) {
-            speichern("data/scores.txt", String.valueOf(guthaben) + " " + String.valueOf(highscore) + " " + String.valueOf(pointswon) + " " + String.valueOf(games_played));
+            speichern("data/scores.data", String.valueOf(guthaben) + " " + String.valueOf(highscore) + " " + String.valueOf(pointswon) + " " + String.valueOf(games_played));
         }
         Scanner filescanner = new Scanner(file);
         filescanner.useDelimiter(" ");
@@ -59,13 +61,20 @@ public class Spielautomat
         pointswon = Integer.parseInt(filescanner.next());
         games_played = Integer.parseInt(filescanner.next());
         filescanner.close();
+
+        //Größe ermitteln
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.getWidth();
         int heigth = (int)size.getHeight();
-        new ZEICHENFENSTER("test", width, heigth, true, true);
+
+        //Spiel initialisieren
         startcode = 1;
+        new ZEICHENFENSTER("Spielautomat", width, heigth, true, true);
         Spielautomat spiel = new Spielautomat(width, heigth);
+        spiel.launch();
         spiel.zeichne();
+
+        //Commandlistening
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter(" ");
         String command;
@@ -101,15 +110,22 @@ public class Spielautomat
             }
         }
     }
+
+    public void launch() {
+        spielwalze1 = new SPIELWALZE(breite / 2 - laenge / 2 * 3, 10, laenge, z3);
+        spielwalze2 = new SPIELWALZE(breite / 2 - laenge / 2, 10, laenge, z2);
+        spielwalze3 = new SPIELWALZE(breite / 2 + laenge / 2, 10, laenge, z1);
+    }
     
     public void zeichne()
     {
         spielwalze1.zeichne();
         spielwalze2.zeichne();
         spielwalze3.zeichne();
+        ZEICHENFENSTER.singleton.frame.addKeyListener(new KeyEventManager(this));
     } 
     
-    public void aktualisiere(int z1Neu, int z2Neu, int z3Neu)
+    public synchronized void aktualisiere(int z1Neu, int z2Neu, int z3Neu)
     {
         for (int i = 0; i < 15; i++) {
             z1++;
@@ -149,6 +165,8 @@ public class Spielautomat
     
     public void spiele() throws IOException
     {
+        if(playing) return;
+        playing = true;
         aktualisiere(zufall.nextInt(9), zufall.nextInt(9), zufall.nextInt(9));
         guthaben += guthaben();
         switch(guthaben()) {
@@ -157,7 +175,8 @@ public class Spielautomat
             case -1: games_played += 1;
         }
         if(guthaben > highscore) highscore = guthaben;
-        speichern("data/scores.txt", String.valueOf(guthaben) + " " + String.valueOf(highscore) + " " + String.valueOf(pointswon) + " " + String.valueOf(games_played));
+        speichern("data/scores.data", String.valueOf(guthaben) + " " + String.valueOf(highscore) + " " + String.valueOf(pointswon) + " " + String.valueOf(games_played));
+        playing = false;
     }
     
     public int guthaben()
@@ -169,7 +188,7 @@ public class Spielautomat
         } else return -1;
     }
     
-    public static void speichern(String file, String value) throws IOException 
+    public static synchronized void speichern(String file, String value) throws IOException 
     {
         Writer w = new FileWriter(file);
         w.write(value);
