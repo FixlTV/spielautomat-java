@@ -3,40 +3,34 @@ import java.util.Scanner;
 import java.awt.*;
 import java.io.*;
 
+
 public class Spielautomat {
     private SPIELWALZE spielwalze1, spielwalze2, spielwalze3;
     private int z1, z2, z3;
     private Random zufall;
     private boolean playing = false;
     private static int guthaben = 100;
-    private static int startcode = -1;
     private static int highscore = 100;
     private static int pointswon = 0;
     private static int games_played = 0;
     private static int breite;
     private static int laenge;
+    public static Spielautomat spiel;
     
     public Spielautomat() throws IOException
     {
-        main(null);
-        // zufall = new Random();
+        // main(null);
+        zufall = new Random();
      
-        // z1 = 7;
-        // z2 = 7;
-        // z3 = 7;
-        // spielwalze1 = new SPIELWALZE(10, 10, 50, z3);
-        // spielwalze2 = new SPIELWALZE(60, 10, 50, z2);
-        // spielwalze3 = new SPIELWALZE(110, 10, 50, z1);
+        z1 = 7;
+        z2 = 7;
+        z3 = 7;
+        spielwalze1 = new SPIELWALZE(10, 10, 50, z3);
+        spielwalze2 = new SPIELWALZE(60, 10, 50, z2);
+        spielwalze3 = new SPIELWALZE(110, 10, 50, z1);
     }
 
     public Spielautomat(int width, int hoehe) throws IOException {
-        if(startcode == -1) {
-            System.out.println("BlueJ Startschutz ausgelöst.");
-            System.out.println("Zur Verwendung des Automaten bitte die Main Methode aufrufen.");
-            System.out.println("Der Prozess wird nun automatisch neugestartet.");
-            main(null);
-            return;
-        }
         laenge = width / 7;
         breite = width;
 
@@ -62,15 +56,16 @@ public class Spielautomat {
         games_played = Integer.parseInt(filescanner.next());
         filescanner.close();
 
-        //Größe ermitteln
+        //Gr��e ermitteln
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.getWidth();
         int heigth = (int)size.getHeight();
 
         //Spiel initialisieren
-        startcode = 1;
         new ZEICHENFENSTER("Spielautomat", width, heigth, true, true);
         Spielautomat spiel = new Spielautomat(width, heigth);
+        Spielautomat.spiel = spiel;
+        ZEICHENFENSTER.spiel = spiel;
         spiel.launch();
         spiel.zeichne();
 
@@ -82,31 +77,37 @@ public class Spielautomat {
             command = sc.nextLine();
             String[] commandOptions = command.split(" ");
             if(commandOptions.length == 0) commandOptions[0] = "";
-            if(command.startsWith("rerun")) {
-                spiel.spiele();
-            } else if(commandOptions[0].equals("stop")) {
-                sc.close();
-                System.exit(1);
-            } else if(commandOptions[0].startsWith("score")) {
-                if(commandOptions.length == 1) commandOptions[1] = "";
-                if(commandOptions[1].equals("add")) {
-
-                } else if(commandOptions[1].equals("remove")) {
-
-                } else if(commandOptions[1].equals("set")) {
-
-                } else if(commandOptions[1].equals("reset")) {
-
-                } else {
-                    System.out.println("System Command score:");
-                    System.out.println("score add <Integer>        | Fügt Score Punkte hinzu");
-                    System.out.println("score remove <Integer>     | Entfernt Score Punkte");
-                    System.out.println("score set <Integer>        | Setzt die Score Punkte auf einen absoluten Wert");
-                    System.out.println("score reset                | Setzt die Score Punkte auf den Standardwert zurück");
-                }
-            } else {
-                System.out.println("Unknown Command.");
-                System.out.println("Try 'help' for a list of all available commands.");
+            switch(commandOptions[0]) {
+                case "run": spiel.spiele(); break;
+                case "stop": 
+                case "exit": sc.close(); System.exit(1); break;
+                case "score": 
+                    switch(commandOptions[1]) {
+                        case "add": 
+                            if(commandOptions.length < 2 || commandOptions[2] == null) {
+                                System.out.println("Syntaxfehler:");
+                                System.out.println("> score add <Zahl>");
+                                break;
+                            }
+                            break;
+                        case "remove": break;
+                        case "set": break;
+                        case "reset": break;
+                        default: 
+                            System.out.println("Cheat Hilfe\n");
+                    } break;
+                case "help":
+                    System.out.println(
+                        "Spielautomat Bedienungsanleitung\n" +
+                        "> 'run'\n  Startet eine Runde\n" +
+                        "> 'stop'\n  Beendet das Programm\n" +
+                        "> 'exit'\n  Äquivalent zu 'stop'\n" +
+                        "> 'score'\n  Ändert den Spielstand"
+                    );
+                    break;
+                default:                    
+                    System.out.println("Unbekannter Befehl");
+                    System.out.println("> 'help'");
             }
         }
     }
@@ -122,10 +123,9 @@ public class Spielautomat {
         spielwalze1.zeichne();
         spielwalze2.zeichne();
         spielwalze3.zeichne();
-        ZEICHENFENSTER.singleton.frame.addKeyListener(new KeyEventManager(this));
     } 
     
-    public synchronized void aktualisiere(int z1Neu, int z2Neu, int z3Neu)
+    public void aktualisiere(int z1Neu, int z2Neu, int z3Neu)
     {
         for (int i = 0; i < 15; i++) {
             z1++;

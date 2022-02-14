@@ -6,6 +6,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Ampel",
+            "request": "launch",
+            "mainClass": "Ampel",
+            "projectName": "v2_a9873856"
+        },
+        {
+            "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "v2_5f0036d7"
+        },
+        {
+            "type": "java",
+            "name": "Launch KASTEN",
+            "request": "launch",
+            "mainClass": "KASTEN",
+            "projectName": "v2_a9873856"
+        },
+        {
+            "type": "java",
+            "name": "Launch Schueler",
+            "request": "launch",
+            "mainClass": "SPIELAUTOMAT.Schueler",
+            "projectName": "v2_a9873856"
+        },
+        {
+            "type": "java",
+            "name": "Launch main",
+            "request": "launch",
+            "mainClass": "main",
+            "projectName": "v2_a9873856"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"

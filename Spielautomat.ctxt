@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Spielautomat
+comment1.params=
+comment1.target=Spielautomat()
+comment2.params=width\ hoehe
+comment2.target=Spielautomat(int,\ int)
+comment3.params=args
+comment3.target=void\ main(java.lang.String[])
+comment4.params=
+comment4.target=void\ launch()
+comment5.params=
+comment5.target=void\ zeichne()
+comment6.params=z1Neu\ z2Neu\ z3Neu
+comment6.target=void\ aktualisiere(int,\ int,\ int)
+comment7.params=
+comment7.target=void\ spiele()
+comment8.params=
+comment8.target=int\ guthaben()
+comment9.params=file\ value
+comment9.target=void\ speichern(java.lang.String,\ java.lang.String)
+numComments=10

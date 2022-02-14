@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.net.URL;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.IOException;
 
 /**
  * Class ZEICHENFENSTER - Eine Klasse, die einfache grafische Zeichnungen 
@@ -14,8 +17,7 @@ import java.net.URL;
  * @version 2007.05.07
  */
 
-public class ZEICHENFENSTER
-{
+public class ZEICHENFENSTER implements KeyListener {
     public JFrame frame;
     private CanvasPane canvas;
     private JPanel steuerungOst,steuerungSued;
@@ -24,6 +26,7 @@ public class ZEICHENFENSTER
     private Image canvasImage;
 
     public static ZEICHENFENSTER singleton;
+    public static Spielautomat spiel;
 
 
     public ZEICHENFENSTER(String titel, int breite, int hoehe, boolean showIcon, boolean maximize) {
@@ -632,6 +635,27 @@ public class ZEICHENFENSTER
         public void paint(Graphics g)
         {
             g.drawImage(canvasImage, 0, 0, null);
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        System.out.println(e);
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_SPACE: 
+                try {
+                    System.out.println("Hallo");
+                    ZEICHENFENSTER.spiel.spiele();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                break;
         }
     }
 }

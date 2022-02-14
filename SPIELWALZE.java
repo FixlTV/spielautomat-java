@@ -1,27 +1,22 @@
-public class SPIELWALZE
-{
+public class SPIELWALZE {
     private VOLLKREIS lampe;
     private KASTEN rahmen;
     private int farbnummer;
 
-    public SPIELWALZE(int linksStart, int obenStart, int breite, int farbnrStart)
-    {
-        lampe = new VOLLKREIS(linksStart + breite / 2, obenStart + breite / 2, breite / 2 / 8 * 7, farbnrStart);
+    public SPIELWALZE(int linksStart, int obenStart, int breite, int farbnrStart) {
+        lampe = new VOLLKREIS(linksStart + breite / 2, obenStart + breite / 2, breite / 3, farbnrStart);
         rahmen = new KASTEN(linksStart, obenStart, breite, breite);
         farbnummer = farbnrStart;
     }
-    
-    public void zeichne()
-    {
+
+    public void zeichne() {
         rahmen.zeichne();
         lampe.zeichne();
     }
 
-    public void faerbeUm(int neueFarbe)
-    {
+    public void faerbeUm(int neueFarbe) {
         farbnummer = neueFarbe;
         lampe.setzeFarbe(farbnummer);
         zeichne();
     }
-    
 }
